@@ -29,7 +29,7 @@ import com.sotoy.spam.R;
 import com.sotoy.spam.controller.TextDetector;
 
 public class MainActivity extends AppCompatActivity  {
-	private static final String TAG = "MainActivity";
+	private static final String TAG = "DrawDigitActivity";
 
 
 	private TextDetector mDetector = new TextDetector();

@@ -40,4 +40,23 @@ public class TextDetector {
 		int re2 = initText(assetManager, "file:///android_asset/sotoy2.pb");
 		return re2 >= 0;
 	}
+
+	private native int init(AssetManager assetManager, String model);
+
+	/**
+	 * draw pixels
+	 */
+	public native int detectDigit(int[] pixels);
+
+	public boolean setupDigitDetector(Context context) {
+		AssetManager assetManager = context.getAssets();
+
+		// model from beginner tutorial
+		int ret = init(assetManager, "file:///android_asset/beginner-graph.pb");
+
+		// model from expert tutorial
+//		int ret = init(assetManager, "file:///android_asset/expert-graph.pb");
+
+		return ret >= 0;
+	}
 }

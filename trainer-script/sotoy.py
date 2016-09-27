@@ -4,13 +4,8 @@ import numpy as np
 from sklearn.feature_extraction.text import CountVectorizer
 import tensorflow as tf
 from sklearn.cross_validation import train_test_split
-data = pd.read_csv("data/train.csv")
-df_train, df_test = train_test_split(data, test_size=0.9)
+from sklearn.cross_validation import StratifiedKFold
 
-x = df_train[df_train.is_spam == 0].shape[0]
-y = df_train[df_train.is_spam == 1].shape[0]
-
-print x* 100./(x+y)
 
 def transform_labels(labels):
     transformed_labels = []
@@ -22,69 +17,85 @@ def transform_labels(labels):
     return np.array(transformed_labels)
 
 
-def clean_text(text):
-    text = text.lower()
-    text = text.strip()
-    text = re.sub('\n', ' ', text)
-    text = re.sub('\r', ' ', text)
-    text = re.sub('\d', ' ', text)
-    text = re.sub(r'\W+', ' ', text)
-    return text
-
-feature_desc = data['description'].replace(np.nan, ' ')
-feature = data['title'] + " " + feature_desc
-feature = feature.replace('[^0-9a-zA-Z]+', ' ', regex=True)
-
-desc = df_train['description'].replace(np.nan, ' ')
-texts = df_train['title'] + " " + desc
-texts = texts.replace('[^0-9a-zA-Z]+', ' ', regex=True)
-labels = transform_labels(df_train.is_spam)
+def clean_text(texts):
+    texts = texts.replace(np.nan, ' ')
+    texts = texts.replace('[^0-9a-zA-Z]+', ' ', regex=True)
+    return texts
 
 
-test_texts = []
-test_labels = []
-for row in df_test.values:
-    text = row[0] + " "
-    if pd.notnull(row[1]):
-        text = text + row[1]
-    text = clean_text(text)
-    test_texts.append(text)
-    if row[2] == 0:
-        test_labels.append([1, 0])
-    else:
-        test_labels.append([0, 1])
+def train(sess, matrix_train, train_labels):
+    x = tf.placeholder(tf.float32, [None, feature_wide])
+    W = tf.Variable(tf.zeros([feature_wide, label_size]))
+    b = tf.Variable(tf.zeros([label_size]))
+    y = tf.nn.softmax(tf.matmul(x, W) + b)
+    y_ = tf.placeholder(tf.float32, [None, label_size])
 
-test_labels = np.array(test_labels)
-cv = CountVectorizer()
-cv.fit(feature)
-
-matrix = cv.transform(texts)
-matrix_test = cv.transform(test_texts)
-train_count, feature_wide = matrix.shape
-label_size = 2
+    cross_entropy = tf.reduce_mean(-tf.reduce_sum(y_ * tf.log(y), reduction_indices=[1]))
+    train_step = tf.train.GradientDescentOptimizer(0.01).minimize(cross_entropy)
+    init = tf.initialize_all_variables()
+    sess.run(init)
+    sess.run(train_step, feed_dict={x: matrix_train, y_: train_labels})
 
 
-matrix = matrix.toarray()
-x = tf.placeholder(tf.float32, [None, feature_wide])
-W = tf.Variable(tf.zeros([feature_wide, label_size]))
-b = tf.Variable(tf.zeros([label_size]))
-y = tf.nn.softmax(tf.matmul(x, W) + b)
-y_ = tf.placeholder(tf.float32, [None, label_size])
+    _W = W.eval(sess)
+    _b = b.eval(sess)
+    
+    return W, b, _W, _b, x, y, y_
 
-cross_entropy = tf.reduce_mean(-tf.reduce_sum(y_ * tf.log(y), reduction_indices=[1]))
-train_step = tf.train.GradientDescentOptimizer(0.01).minimize(cross_entropy)
-init = tf.initialize_all_variables()
+def evaluate_accuracy(sess, y, y_, x, matrix_test, test_labels):
+    correct_prediction = tf.equal(tf.argmax(y, 1), tf.argmax(y_, 1))
+    accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
+    accuracy_result = sess.run(accuracy, feed_dict={x: matrix_test, y_: test_labels})
+    return accuracy_result 
+
+data = pd.read_csv("data/train.csv")
+feature = clean_text(data['title'])
+labels = transform_labels(data.is_spam)
+
+spam_labels_count = data[data.is_spam == 0].shape[0]
+non_spam_labels_count = data[data.is_spam == 1].shape[0]
+print "Komposisi Spam : ", (spam_labels_count * 100. / (non_spam_labels_count + spam_labels_count))
+cv = CountVectorizer(ngram_range=(1,1), stop_words=("di", "anda", "info", "no", "in", "http", "pin", "ke", "com","www"))
+cv.fit(feature) 
+matrix_all = cv.transform(feature).toarray()
+#import ipdb;ipdb.set_trace()
+skfld = StratifiedKFold(data.is_spam, n_folds=10)
+
+accuracy_sum = []
+
+for idx, row in enumerate(skfld):
+    train_index, test_index  = row
+    df_train, df_test = data.iloc[train_index], data.iloc[test_index]    
+
+    train_texts = clean_text(df_train['title'])
+    train_labels = transform_labels(df_train.is_spam)
+
+    test_texts = clean_text(df_test['title'])
+    test_labels = transform_labels(df_test.is_spam)
+
+    matrix_train = cv.transform(train_texts).toarray()
+    matrix_test = cv.transform(test_texts).toarray()
+
+    train_count, feature_wide = matrix_train.shape
+    label_size = 2
+
+    sess = tf.Session()
+    W, b, _W, _b, x, y, y_ = train(sess, matrix_train, train_labels)
+    accuracy_result = evaluate_accuracy(sess, y, y_, x, matrix_test, test_labels )
+    print "Iteration %s : %s" % (idx, accuracy_result) 
+    accuracy_sum.append(accuracy_result)
+
+
+    _W = W.eval(sess)
+    _b = b.eval(sess)
+    sess.close()
+
+print "Avarage  10 cross_validation accuracy = ", np.mean(accuracy_sum) * 100., "%"
+
+
+print "Fit all data"
 sess = tf.Session()
-sess.run(init)
-sess.run(train_step, feed_dict={x: matrix, y_: labels})
-
-
-correct_prediction = tf.equal(tf.argmax(y, 1), tf.argmax(y_, 1))
-accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
-matrix_test = matrix_test.toarray()
-print(sess.run(accuracy, feed_dict={x: matrix_test, y_: test_labels})) #0.933168
-
-
+W, b, _W, _b, x, y, y_ = train(sess, matrix_all, labels)
 _W = W.eval(sess)
 _b = b.eval(sess)
 sess.close()
@@ -93,8 +104,8 @@ sess.close()
 g_2 = tf.Graph()
 with g_2.as_default():
     # Reconstruct graph
-    print matrix.shape[1]
-    x_2 = tf.placeholder("float", [None, matrix.shape[1]], name="input")
+    print "Please change the shape to : ", matrix_all.shape[1]
+    x_2 = tf.placeholder("float", [None, matrix_all.shape[1]], name="input")
     W_2 = tf.constant(_W, name="constant_W")
     b_2 = tf.constant(_b, name="constant_b")
     y_2 = tf.nn.softmax(tf.matmul(x_2, W_2) + b_2, name="output")
@@ -109,11 +120,7 @@ with g_2.as_default():
     tf.train.write_graph(graph_def, 'model/',
                          'sotoy2.pb', as_text=False)
 
-    # Test trained model
-    y__2 = tf.placeholder("float", [None, 2])
-    correct_prediction_2 = tf.equal(tf.argmax(y_2, 1), tf.argmax(y__2, 1))
-    accuracy_2 = tf.reduce_mean(tf.cast(correct_prediction_2, "float"))
-    print(accuracy_2.eval({x_2: matrix_test, y__2: test_labels}, sess_2))
+    print "Finish write model to file"
 
 
 

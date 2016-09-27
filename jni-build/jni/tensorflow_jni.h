@@ -28,6 +28,17 @@ extern "C" {
 #define TENSORFLOW_METHOD(METHOD_NAME) \
   Java_com_sotoy_spam_controller_TextDetector_##METHOD_NAME  // NOLINT
 
+
+JNIEXPORT jint JNICALL
+TENSORFLOW_METHOD(init)(
+    JNIEnv* env, jobject thiz, jobject java_asset_manager,
+    jstring model);
+
+JNIEXPORT jint JNICALL
+TENSORFLOW_METHOD(detectDigit)(
+    JNIEnv* env, jobject thiz, jintArray image);
+
+
 JNIEXPORT jint JNICALL
 TENSORFLOW_METHOD(detectText)(
     JNIEnv* env, jobject thiz, jintArray rawsText);

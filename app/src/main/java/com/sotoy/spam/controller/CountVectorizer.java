@@ -15,7 +15,7 @@ import java.util.Map;
 public class CountVectorizer {
 
 
-    private static int FEATURES_COUNT = 1321;
+    private static int FEATURES_COUNT = 1829;
     private String [] keys;
     private Map<String, Integer> mapper;
 

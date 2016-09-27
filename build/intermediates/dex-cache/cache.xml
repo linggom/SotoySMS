@@ -7,7 +7,7 @@
         jumboMode="true"
         optimize="true"
         revision="23.0.2"
-        sha1="537c6f617c62a455505863b4250dba0e4a2b1ca5">
+        sha1="9b623fc1707641a1ffc6990db41aab6e5bc0493c">
         <dex dex="/Users/goman/Documents/workspace/SotoySpamSMS/app/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run-bootstrap_8257928828a2ea9c9e449bc1a399e1d64f450958/classes.dex" />
     </item>
     <item
@@ -16,7 +16,7 @@
         jumboMode="true"
         optimize="true"
         revision="23.0.2"
-        sha1="c6dd9f4683db422ef2a05310be98827a4017db97">
+        sha1="8e7285c20a32ea8e7f50c4560f7a80f39f931510">
         <dex dex="/Users/goman/Documents/workspace/SotoySpamSMS/app/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run_ca4e32f8b23f5f55fc8df528b29ca8b00e852ca2/classes.dex" />
     </item>
     <item
