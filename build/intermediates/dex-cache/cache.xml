@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        is-multidex="true"
+        jar="/Users/goman/Documents/workspace/SotoySpamSMS/app/build/intermediates/incremental-classes/debug/instant-run-bootstrap.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="23.0.2"
+        sha1="537c6f617c62a455505863b4250dba0e4a2b1ca5">
+        <dex dex="/Users/goman/Documents/workspace/SotoySpamSMS/app/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run-bootstrap_8257928828a2ea9c9e449bc1a399e1d64f450958/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/goman/Documents/workspace/SotoySpamSMS/app/build/intermediates/incremental-runtime-classes/debug/instant-run.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="23.0.2"
+        sha1="c6dd9f4683db422ef2a05310be98827a4017db97">
+        <dex dex="/Users/goman/Documents/workspace/SotoySpamSMS/app/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run_ca4e32f8b23f5f55fc8df528b29ca8b00e852ca2/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/goman/Documents/workspace/SotoySpamSMS/app/build/intermediates/exploded-aar/com.android.support/support-v4/23.1.1/jars/libs/internal_impl-23.1.1.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="23.0.2"
+        sha1="a4de9c81ae239414e1ed0f86441b02abaf29bca9">
+        <dex dex="/Users/goman/Documents/workspace/SotoySpamSMS/app/build/intermediates/transforms/dex/debug/folders/1000/10/internal_impl-23.1.1_7937966e2443e747bb891e0eee5b7dcc698b95eb/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/goman/Documents/workspace/SotoySpamSMS/app/build/intermediates/exploded-aar/com.android.support/support-v4/23.1.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="23.0.2"
+        sha1="6cbc7773921fcfedbe55657578f0cbfe614778dc">
+        <dex dex="/Users/goman/Documents/workspace/SotoySpamSMS/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-v4-23.1.1_901907b541c273d02f420272c4b1af9235cda698/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/goman/Documents/workspace/SotoySpamSMS/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.1.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="23.0.2"
+        sha1="5c5699834e9722f1c288fea2de82725d078ba127">
+        <dex dex="/Users/goman/Documents/workspace/SotoySpamSMS/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-appcompat-v7-23.1.1_53a80b4bd3bf40391881a53ec9657d7cda1545c1/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/goman/Documents/workspace/SotoySpamSMS/app/build/intermediates/exploded-aar/com.android.support/recyclerview-v7/23.1.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="23.0.2"
+        sha1="09c5e804bc67fc0580360043dff067df574a60d4">
+        <dex dex="/Users/goman/Documents/workspace/SotoySpamSMS/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-recyclerview-v7-23.1.1_732ed06bf82ff5ec22f6d3bf710498561cad83ab/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/goman/Library/Android/sdk/extras/android/m2repository/com/android/support/support-annotations/23.1.1/support-annotations-23.1.1.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="23.0.2"
+        sha1="8d680ba5a623724d1fb0e81c36a790f023a6cede">
+        <dex dex="/Users/goman/Documents/workspace/SotoySpamSMS/app/build/intermediates/transforms/dex/debug/folders/1000/10/support-annotations-23.1.1_46d57af051b12a788aec1a037cf09688cc9084c7/classes.dex" />
+    </item>
+
+</items>
